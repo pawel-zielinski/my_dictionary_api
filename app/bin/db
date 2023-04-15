@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker exec -it my_dictionary_api-database-1 psql -U postgres
