@@ -8,8 +8,8 @@ services:
     volumes:
       - ./app:/app
     command: >
-      sh -c "python manage.py wait_for_db &&
-             python manage.py migrate &&
+      sh -c "python manage.py migrate &&
+             python manage.py wait_for_db &&
              python manage.py runserver 0.0.0.0:8000"
     restart: always
     depends_on: [database]
@@ -22,3 +22,22 @@ services:
       - POSTGRES_PASSWORD=postgres
     ports:
       - '5432:5432'
+
+  redis:
+    image: redis:alpine
+  celery:
+    restart: always
+    build:
+      context: .
+    command: celery -A app worker -l info
+    volumes:
+      - ./app:/app
+    environment:
+      - DB_HOST=database
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASS=postgres
+    depends_on:
+      - database
+      - redis
+      - backend
