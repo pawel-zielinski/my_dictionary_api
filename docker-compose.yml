@@ -1,6 +1,6 @@
-version: "3"
+version: "3.8"
 services:
-  app:
+  backend:
     build:
       context: .
     ports:
@@ -8,4 +8,40 @@ services:
     volumes:
       - ./app:/app
     command: >
-      sh -c "python manage.py runserver 0.0.0.0:8000"
+      sh -c "python manage.py migrate &&
+             python manage.py wait_for_db &&
+             python manage.py runserver 0.0.0.0:8000"
+    restart: always
+    depends_on:
+      - database
+      - redis
+    environment:
+      - .env
+
+  database:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - .env
+    ports:
+      - '5432:5432'
+
+  redis:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+
+  celery:
+    restart: always
+    build:
+      context: .
+    command: celery -A app worker -l info
+    volumes:
+      - ./app:/app
+    environment:
+      - .env
+    depends_on:
+      - database
+      - redis
+      - backend
