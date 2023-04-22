@@ -1,4 +1,4 @@
-FROM python:3.7-alpine
+FROM python:3.10-alpine
 MAINTAINER Pawel Zielinski
 
 ENV PYTHONUNBUFFERED 1
