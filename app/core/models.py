@@ -8,7 +8,7 @@ class User(DjangoUser):
 
 class Event(models.Model):
     name = models.CharField(max_length=100)
-    organizer = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='organizer')
+    organizer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='organizer')
     guests = models.ManyToManyField(User, related_name='guests')
     tags = models.ManyToManyField('Tag', related_name='tags')
     date = models.DateTimeField()
@@ -17,8 +17,8 @@ class Event(models.Model):
 
 
 class Profile(models.Model):
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=20, unique=True)
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=20, unique=True)
