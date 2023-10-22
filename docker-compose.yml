@@ -17,6 +17,8 @@ services:
       - redis
     env_file:
       - .env
+    stdin_open: true
+    tty: true
 
   database:
     image: postgres:14.1-alpine
