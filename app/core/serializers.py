@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer, Serializer
 
-from core.models import User, Event
+from core.models import User, Event, Document
 
 
 class HomeSerializer(Serializer):
@@ -40,4 +40,17 @@ class UserSerializer(ModelSerializer):
             'is_active',
             'date_joined',
             'profile',
+        )
+
+
+class DocumentSerializer(ModelSerializer):
+    class Meta:
+        model = Document
+        fields = (
+            'title',
+            'course',
+            'author',
+            'attachment',
+            'summary',
+            'date_added',
         )
