@@ -35,7 +35,7 @@ class Event(models.Model):
 
 
 class Profile(models.Model):
-    name = models.CharField(max_length=20, unique=True)
+    name = models.CharField(max_length=20, unique=True, null=True, default='default profile')
 
     def __str__(self):
         return self.name
@@ -52,8 +52,8 @@ class Document(models.Model):
     title = models.CharField(max_length=256)
     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='course')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author')
-    attachment = models.FileField(upload_to=document_file_patch)
-    summary = models.CharField(max_length=1024)
+    attachment = models.FileField(upload_to=document_file_patch, blank=True, null=True)
+    summary = models.CharField(max_length=1024, blank=True, null=True)
     date_added = models.DateField(auto_now=True)
 
     def __str__(self):

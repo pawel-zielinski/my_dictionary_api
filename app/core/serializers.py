@@ -34,11 +34,6 @@ class UserSerializer(ModelSerializer):
         fields = (
             'first_name',
             'last_name',
-            'username',
-            'email',
-            'is_staff',
-            'is_active',
-            'date_joined',
             'profile',
         )
 
@@ -49,8 +44,12 @@ class DocumentSerializer(ModelSerializer):
         fields = (
             'title',
             'course',
-            'author',
             'attachment',
             'summary',
             'date_added',
         )
+
+    def create(self, validated_data):
+        author = User.objects.get(username=self.context['request'].user.username)
+        validated_data.update({'author': author})
+        return super().create(validated_data)
