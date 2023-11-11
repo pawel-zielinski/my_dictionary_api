@@ -20,7 +20,6 @@ class EventSerializer(ModelSerializer):
         model = Event
         fields = (
             'name',
-            'organizer',
             'guests',
             'tags',
             'attachment',
