@@ -43,7 +43,21 @@ def log_out(request):
     return HttpResponseRedirect(reverse('login'))
 
 
-class RegisterViewSet(generics.CreateAPIView):
+class RegisterViewSet(views.APIView):
+    renderer_classes = (TemplateHTMLRenderer,)
+    template_name = 'auth/register.html'
     queryset = User.objects.all()
     permission_classes = (permissions.AllowAny,)
     serializer_class = RegisterSerializer
+
+    def get(self, request, format=None):
+        """Get login page."""
+        serializer = RegisterSerializer()
+        return Response({'serializer': serializer})
+
+    def post(self, request, *args, **kwargs):
+        serializer = RegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return redirect('/auth/login/')
+        return Response({'serializer': serializer})

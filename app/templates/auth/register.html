@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load rest_framework %}
+{% block title_block %} Register Page {% endblock %}
+
+{% block body %}
+<style>
+    .content-box {
+        max-width: 600px;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: justify;
+    }
+</style>
+
+
+<div class="content-box">
+    <h2 style="text-align: center">Log In</h2>
+    <form action="{% url 'auth_register' %}" method="post" novalidate>
+        {% csrf_token %}
+        {% render_form serializer %}
+        <div style="text-align: center">
+            <button type="submit" class="btn btn-lg btn-success">Register</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
