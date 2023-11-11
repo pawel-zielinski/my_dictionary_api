@@ -28,6 +28,11 @@ class EventSerializer(ModelSerializer):
             'notes',
         )
 
+    def create(self, validated_data):
+        organizer = User.objects.get(username=self.context['request'].user.username)
+        validated_data.update({'organizer': organizer})
+        return super().create(validated_data)
+
 
 class UserSerializer(ModelSerializer):
     class Meta:
