@@ -3,6 +3,7 @@ from rest_framework import viewsets
 from rest_framework.mixins import DestroyModelMixin, UpdateModelMixin, RetrieveModelMixin, CreateModelMixin, \
     ListModelMixin
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
@@ -12,6 +13,8 @@ from core.serializers import HomeSerializer, EventSerializer, UserSerializer, Do
 
 
 class HomeViewSet(GenericViewSet, CreateModelMixin, ListModelMixin):
+    template_name = 'home.html'
+    renderer_classes = (TemplateHTMLRenderer,)
     queryset = Event.objects.all()
     serializer_class = HomeSerializer
     permission_classes = (IsAuthenticated, EventPermission)
