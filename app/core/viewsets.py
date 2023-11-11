@@ -33,7 +33,7 @@ class EventViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        return Response({'serializer': serializer}, template_name='features/event_detail.html')
+        return Response({'data': serializer.data}, template_name='features/event_detail.html')
 
     @action(detail=True, methods=['get', 'post'])
     def events(self, request, *args, **kwargs):

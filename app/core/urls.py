@@ -10,5 +10,6 @@ router.register('docs', DocumentViewSet, basename='document')
 urlpatterns = [
     path('event/', EventViewSet.as_view({'get': 'events', 'post': 'events'}), name='eventpage'),
     path('event/<int:pk>/', EventViewSet.as_view({'get': 'retrieve'}), name='eventpage'),
+    path('event/<int:pk>/edit', EventViewSet.as_view({'patch': 'update'}), name='eventpage'),
 ]
 urlpatterns += router.urls

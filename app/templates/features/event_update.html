@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load rest_framework %}
+{% block title_block %} Log In Page {% endblock %}
+
+{% block body %}
+<style>
+    .content-box {
+        max-width: 600px;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: justify;
+    }
+</style>
+
+
+<div class="content-box">
+    <h1 style="text-align: center">Update Event</h1>
+    <form method="GET">
+        {% csrf_token %}
+        {{form.as_p}}
+        <div style="text-align: center">
+            <button type="submit" class="btn btn-sm btn-success">Update</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
