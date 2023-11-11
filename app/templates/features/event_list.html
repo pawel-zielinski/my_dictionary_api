@@ -13,25 +13,44 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         text-align: justify;
     }
-</style>
 
-<h1>Event List</h1>
+    .topic {
+        text-align: center;
+        color: RGB(26, 161, 184);
+        text-decoration: none;
+    }
+</style>
 
 
 <div class="content-box">
-    <h2 style="text-align: center">Events</h2>
-    <form action="{% url 'eventpage-list' %}" method="get" novalidate>
-        {% for each in serializer.data %}
+    <h1 style="text-align: center">Create Event</h1>
+    <form method="GET">
+        {% csrf_token %}
+        {{form.as_p}}
+        <div style="text-align: center">
+            <button type="submit" class="btn btn-sm btn-success">Create</button>
+        </div>
+    </form>
+</div>
+
+
+<div class="content-box">
+    <h1 style="text-align: center">Events</h1>
+    <form action="{% url 'eventpage' %}" method="get" novalidate>
+        {% for each in events %}
 
         <div class="content-box">
-            <strong>Name:</strong> {{ each.name }}<br>
+            <div class="topic">
+                <b>
+                    <a href="{% url 'eventpage' pk=each.id %}" style="color: inherit">
+                        {{ each.name | upper }}
+                    </a>
+                </b>
+            </div>
+
             <strong>Organizer:</strong> {{ each.organizer.first_name }} {{ each.organizer.last_name }}<br>
             <strong>Date:</strong> {{ each.date }}<br>
             <strong>Guests:</strong> {{ each.guests | length }}<br>
-            <a type="submit" class="btn btn-sm btn-warning" href="{% url 'eventpage-detail' pk=each.id %}">
-                Details
-            </a>
-
         </div>
         {% endfor %}
     </form>
