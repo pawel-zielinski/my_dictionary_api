@@ -1,6 +1,11 @@
+from django.contrib import messages
 from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
+from django.urls import reverse
 from rest_framework import views, permissions, status, generics
+from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 
 from auth.serializers import LoginSerializer, RegisterSerializer
@@ -10,6 +15,13 @@ from core.models import User
 class LoginView(views.APIView):
     """Thesis Degree API login APIView."""
     permission_classes = (permissions.AllowAny,)
+    renderer_classes = (TemplateHTMLRenderer,)
+    template_name = 'auth/login.html'
+
+    def get(self, request, format=None):
+        """Get login page."""
+        serializer = LoginSerializer()
+        return Response({'serializer': serializer})
 
     def post(self, request, format=None):
         """Post login data to authenticate."""
@@ -24,14 +36,11 @@ class LoginView(views.APIView):
         return response
 
 
-class LogoutView(views.APIView):
-    """Thesis Degree API logout APIView."""
-    permission_classes = (permissions.IsAuthenticated,)
-
-    def post(self, request):
-        """Post logout signal to log authenticated user out."""
-        logout(request)
-        return redirect('/auth/login/')
+@login_required
+def log_out(request):
+    logout(request)
+    messages.warning(request, 'Logged Out')
+    return HttpResponseRedirect(reverse('login'))
 
 
 class RegisterViewSet(generics.CreateAPIView):

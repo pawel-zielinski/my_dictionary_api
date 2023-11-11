@@ -12,12 +12,12 @@ from core.permissions import EventPermission, UserPermission, DocumentPermission
 from core.serializers import HomeSerializer, EventSerializer, UserSerializer, DocumentSerializer
 
 
-class HomeViewSet(GenericViewSet, CreateModelMixin, ListModelMixin):
+class HomeViewSet(GenericViewSet, ListModelMixin):
     template_name = 'home.html'
     renderer_classes = (TemplateHTMLRenderer,)
     queryset = Event.objects.all()
     serializer_class = HomeSerializer
-    permission_classes = (IsAuthenticated, EventPermission)
+    permission_classes = (IsAuthenticated,)
 
 
 class EventViewSet(viewsets.ModelViewSet):
