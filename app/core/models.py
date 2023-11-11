@@ -1,5 +1,17 @@
+import os
+import uuid
+from datetime import date
+
 from django.db import models
 from django.contrib.auth.models import User as DjangoUser
+
+
+def document_file_patch(instance, filename):
+    """Generate file path for new documents."""
+    dt = date.today()
+    ext = filename.split('.')[-1]
+    filename = f'{uuid.uuid4()}.{ext}'
+    return os.path.join(f'document_files/{dt.year}/{dt.month}/{dt.day}/', filename)
 
 
 class User(DjangoUser):
@@ -23,7 +35,7 @@ class Event(models.Model):
 
 
 class Profile(models.Model):
-    name = models.CharField(max_length=20, unique=True)
+    name = models.CharField(max_length=20, unique=True, null=True, default='default profile')
 
     def __str__(self):
         return self.name
@@ -31,6 +43,25 @@ class Profile(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=20, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Document(models.Model):
+    title = models.CharField(max_length=256)
+    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='course')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author')
+    attachment = models.FileField(upload_to=document_file_patch, blank=True, null=True)
+    summary = models.CharField(max_length=1024, blank=True, null=True)
+    date_added = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return f'[{self.course.name}] ({self.date_added}) -- "{self.title}"'
+
+
+class Course(models.Model):
+    name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
