@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import render, redirect
 from rest_framework import viewsets
 from rest_framework.mixins import DestroyModelMixin, UpdateModelMixin, RetrieveModelMixin, CreateModelMixin, \
     ListModelMixin
@@ -24,18 +25,25 @@ class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     permission_classes = (IsAuthenticated, EventPermission,)
+    renderer_classes = (TemplateHTMLRenderer,)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response({'serializer': serializer}, template_name='features/event_detail.html')
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        return Response({'serializer': serializer}, template_name='features/event_list.html')
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
+        if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors)
+            messages.info(request, 'Event created successfully')
+            return redirect('/events/')
+        return Response({'serializer': serializer})
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()

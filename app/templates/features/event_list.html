@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load rest_framework %}
+{% block title_block %} Log In Page {% endblock %}
+
+{% block body %}
+<style>
+    .content-box {
+        max-width: 600px;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: justify;
+    }
+</style>
+
+<h1>Event List</h1>
+
+
+<div class="content-box">
+    <h2 style="text-align: center">Events</h2>
+    <form action="{% url 'eventpage-list' %}" method="get" novalidate>
+        {% for each in serializer.data %}
+
+        <div class="content-box">
+            <strong>Name:</strong> {{ each.name }}<br>
+            <strong>Organizer:</strong> {{ each.organizer.first_name }} {{ each.organizer.last_name }}<br>
+            <strong>Date:</strong> {{ each.date }}<br>
+            <strong>Guests:</strong> {{ each.guests | length }}<br>
+            <a type="submit" class="btn btn-sm btn-warning" href="{% url 'eventpage-detail' pk=each.id %}">
+                Details
+            </a>
+
+        </div>
+        {% endfor %}
+    </form>
+</div>
+{% endblock %}
