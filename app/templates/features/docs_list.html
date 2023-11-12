@@ -32,9 +32,34 @@
     </form>
 </div>
 
+<div class="row">
+    <div class="col-md-6">
+        <form method="get" action="{% url 'document-list' %}" class="mb-3">
+            <div class="input-group">
+                <label for="courseFilter" class="input-group-text">Filter by Course:</label>
+                <input type="text" id="courseFilter" name="course_name_contains" class="form-control"
+                       value="{{ request.GET.course_name_contains }}">
+                <button type="submit" class="btn btn-primary">Apply Filter</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-6">
+        <form method="get" action="{% url 'document-list' %}" class="mb-3">
+            <div class="input-group">
+                <label for="courseFilter1" class="input-group-text">Filter by Title:</label>
+                <input type="text" id="courseFilter1" name="title_contains" class="form-control"
+                       value="{{ request.GET.title_contains }}">
+                <button type="submit" class="btn btn-primary">Apply Filter</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
 <div class="content-box">
     <h1 style="text-align: center">Documents</h1>
-    <form action="{% url 'eventpage' %}" method="get" novalidate>
+    <form action="{% url 'docspage' %}" method="get" novalidate>
         {% for each in docs %}
 
         <div class="content-box">

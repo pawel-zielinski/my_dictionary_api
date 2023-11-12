@@ -37,7 +37,7 @@ class EventUpdateView(UpdateView):
 
 
 class EventViewSet(viewsets.ModelViewSet):
-    queryset = Event.objects.all()
+    queryset = Event.objects.all().order_by('-date')
     serializer_class = EventSerializer
     permission_classes = (IsAuthenticated, EventPermission,)
     renderer_classes = (TemplateHTMLRenderer,)
@@ -58,14 +58,6 @@ class EventViewSet(viewsets.ModelViewSet):
         queryset = self.get_queryset()
         is_organizer = User.objects.get(username=request.user.username).profile.name == 'organizer'
         return Response({'form': form, 'events': queryset, 'is_organizer': is_organizer})
-
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data)
-        if serializer.is_valid():
-            serializer.save(organizer=request.user)
-            return Response(serializer.data)
-        return Response(serializer.errors)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -92,11 +84,21 @@ class DocumentUpdateView(UpdateView):
 
 
 class DocumentViewSet(viewsets.ModelViewSet):
-    queryset = Document.objects.all()
+    queryset = Document.objects.all().order_by('-date_added')
     serializer_class = DocumentSerializer
     permission_classes = (IsAuthenticated, DocumentPermission,)
     renderer_classes = (TemplateHTMLRenderer,)
     template_name = 'features/docs_list.html'
+
+    def get_queryset(self):
+        queryset = Document.objects.all()
+        course_name_contains = self.request.query_params.get('course_name_contains', None)
+        title_contains = self.request.query_params.get('title_contains', None)
+        if course_name_contains:
+            queryset = queryset.filter(course__name__icontains=course_name_contains)
+        elif title_contains:
+            queryset = queryset.filter(title__icontains=title_contains)
+        return queryset
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -113,14 +115,6 @@ class DocumentViewSet(viewsets.ModelViewSet):
 
         queryset = self.get_queryset()
         return Response({'form': form, 'docs': queryset})
-
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data)
-        if serializer.is_valid():
-            serializer.save(organizer=request.user)
-            return Response(serializer.data)
-        return Response(serializer.errors)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
