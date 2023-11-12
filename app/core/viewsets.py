@@ -56,7 +56,8 @@ class EventViewSet(viewsets.ModelViewSet):
             messages.info(request, 'Event created successfully')
 
         queryset = self.get_queryset()
-        return Response({'form': form, 'events': queryset})
+        is_organizer = User.objects.get(username=request.user.username).profile.name == 'organizer'
+        return Response({'form': form, 'events': queryset, 'is_organizer': is_organizer})
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()

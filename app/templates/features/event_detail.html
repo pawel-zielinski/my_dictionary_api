@@ -37,7 +37,9 @@
                             </div>
                         </article>
                     </div>
+                    {% if request.user.id == data.organizer.id %}
                 <a href="{% url 'eventpage-update' pk=data.id %}" class="btn btn-sm btn-success">Update</a>
+                {% endif %}
             </form>
                 {% if request.user.id == data.organizer.id %}
                 <form action="{% url 'eventpage-delete' pk=data.id %}" method="post" novalidate>

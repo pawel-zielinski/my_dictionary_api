@@ -21,7 +21,7 @@
     }
 </style>
 
-
+{% if is_organizer %}
 <div class="content-box">
     <h1 style="text-align: center">Create Event</h1>
     <form method="post" enctype="multipart/form-data">
@@ -32,7 +32,7 @@
         </div>
     </form>
 </div>
-
+{% endif %}
 
 <div class="content-box">
     <h1 style="text-align: center">Events</h1>
