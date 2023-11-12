@@ -12,6 +12,7 @@ urlpatterns = [
     path('event/<int:pk>/', EventViewSet.as_view({'get': 'retrieve'}), name='eventpage-detail'),
     path('event/<int:pk>/edit', EventUpdateView.as_view(), name='eventpage-update'),
     path('event/<int:pk>/delete', EventViewSet.as_view({'post': 'destroy'}), name='eventpage-delete'),
+    path('event/<int:pk>/signin', EventViewSet.as_view({'post': 'signin'}), name='eventpage-signin'),
     path('docs/', DocumentViewSet.as_view({'get': 'docs', 'post': 'docs'}), name='docspage'),
     path('docs/<int:pk>/', DocumentViewSet.as_view({'get': 'retrieve'}), name='docspage-detail'),
     path('docs/<int:pk>/edit', DocumentUpdateView.as_view(), name='docspage-update'),

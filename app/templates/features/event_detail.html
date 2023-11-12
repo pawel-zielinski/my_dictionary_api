@@ -37,18 +37,32 @@
                             </div>
                         </article>
                     </div>
+                    </div>
+                </div>
+                    <div class="col-md-12 d-flex justify-content-center">
                     {% if request.user.id == data.organizer.id %}
-                <a href="{% url 'eventpage-update' pk=data.id %}" class="btn btn-sm btn-success">Update</a>
+                <a href="{% url 'eventpage-update' pk=data.id %}" class="btn btn-lg btn-success">Update</a>
                 {% endif %}
             </form>
                 {% if request.user.id == data.organizer.id %}
                 <form action="{% url 'eventpage-delete' pk=data.id %}" method="post" novalidate>
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    <button type="submit" class="btn btn-lg btn-danger">Delete</button>
+                </form>
+                {% endif %}
+                {% if request.user.id != data.organizer.id %}
+
+                <form action="{% url 'eventpage-signin' pk=data.id %}" method="post" novalidate>
+                    {% csrf_token %}
+                    {% if not is_guest %}
+                    <button type="submit" class="btn btn-lg btn-success">Going</button>
+                    {% else %}
+                    <button type="submit" class="btn btn-lg btn-danger">Resign</button>
+                    {% endif %}
                 </form>
                 {% endif %}
 
-            </div>
+
         </div>
     </div>
 </div>

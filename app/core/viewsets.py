@@ -46,7 +46,8 @@ class EventViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        return Response({'data': serializer.data}, template_name='features/event_detail.html')
+        is_guest = User.objects.get(username=request.user.username) in instance.guests.all()
+        return Response({'data': serializer.data, 'is_guest': is_guest}, template_name='features/event_detail.html')
 
     @action(detail=True, methods=['get', 'post'])
     def events(self, request, *args, **kwargs):
@@ -58,6 +59,18 @@ class EventViewSet(viewsets.ModelViewSet):
         queryset = self.get_queryset()
         is_organizer = User.objects.get(username=request.user.username).profile.name == 'organizer'
         return Response({'form': form, 'events': queryset, 'is_organizer': is_organizer})
+
+    @action(detail=True, methods=['post'])
+    def signin(self, request, *args, **kwargs):
+        event = Event.objects.get(pk=kwargs['pk'])
+        user = User.objects.get(username=request.user.username)
+        if user in event.guests.all():
+            event.guests.remove(user)
+            messages.info(request, 'You have been removed from the event')
+        else:
+            event.guests.add(user)
+            messages.info(request, 'You have been added to the event')
+        return redirect(f'/event/{kwargs["pk"]}')
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
