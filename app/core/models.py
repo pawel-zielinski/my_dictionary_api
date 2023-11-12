@@ -26,7 +26,8 @@ class Event(models.Model):
     organizer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='organizer')
     guests = models.ManyToManyField(User, related_name='guests')
     tags = models.ManyToManyField('Tag', related_name='tags')
-    date = models.DateTimeField()
+    date = models.DateField()
+    time = models.TimeField(null=True, blank=True)
     attachment = models.FileField()
     notes = models.CharField(max_length=250)
 

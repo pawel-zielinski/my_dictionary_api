@@ -17,6 +17,7 @@ class HomeSerializer(Serializer):
 
 class EventSerializer(ModelSerializer):
     organizer = serializers.SerializerMethodField()
+    tags = serializers.SerializerMethodField()
 
     class Meta:
         model = Event
@@ -28,12 +29,16 @@ class EventSerializer(ModelSerializer):
             'tags',
             'attachment',
             'date',
+            'time',
             'notes',
         )
 
     @staticmethod
     def get_organizer(obj):
         return obj.organizer
+
+    def get_tags(self, obj):
+        return [tag for tag in obj.tags.all()]
 
     def create(self, validated_data):
         organizer = User.objects.get(username=self.context['request'].user.username)

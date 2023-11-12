@@ -26,7 +26,7 @@
                         <strong>Organizer:</strong> {{ data.organizer.first_name }} {{ data.organizer.last_name }}<br>
                         <strong>Guests:</strong> {{ data.guests|length }}<br>
                         <strong>Tags:</strong> {% for tag in data.tags %} {{ tag.name }} {% endfor %}<br>
-                        <strong>Date:</strong> {{ data.date }}<br>
+                        <strong>Date:</strong> {{ data.date }} {{ data.time }}<br>
                         <strong>Notes:</strong> {{ data.notes }}<br>
                     </div>
                     <div class="col-md-6">

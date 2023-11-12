@@ -2,16 +2,25 @@ from django import forms
 from core.models import Event, User, Document
 
 
+class TimePickerInput(forms.TimeInput):
+    input_type = 'time'
+
+
+class DatePickerInput(forms.DateInput):
+    input_type = 'date'
+
+
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ('name', 'organizer', 'guests', 'tags', 'date', 'attachment', 'notes')
+        fields = ('name', 'organizer', 'guests', 'tags', 'date', 'time', 'attachment', 'notes')
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'guests': forms.SelectMultiple(attrs={'class': 'form-control'}),
             'organizer': forms.Select(attrs={'class': 'form-control'}),
             'tags': forms.SelectMultiple(attrs={'class': 'form-control'}),
-            'date': forms.SelectDateWidget(),
+            'date': DatePickerInput(),
+            'time': TimePickerInput(),
             'attachment': forms.FileInput(attrs={'class': 'form-control'}),
             'notes': forms.TextInput(attrs={'class': 'form-control'}),
         }
