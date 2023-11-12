@@ -20,7 +20,7 @@
     <div class="content-box mt-4">
         <h1 class="text-center">{{ data.name }}</h1>
         <div class="content-box">
-            <form action="{% url 'eventpage' %}" method="get" novalidate>
+            <form action="{% url 'eventpage-detail' pk=data.id %}" method="get" novalidate>
                 <div class="row">
                     <div class="col-md-6">
                         <strong>Organizer:</strong> {{ data.organizer.first_name }} {{ data.organizer.last_name }}<br>
@@ -38,7 +38,7 @@
                         </article>
                     </div>
                 </div>
-                <a href="{% url='/event/{{data.id}}/edit' %}" class="btn btn-sm btn-success">Update</a>
+                <a href="{% url 'eventpage-update' pk=data.id %}" class="btn btn-sm btn-success">Update</a>
             </form>
         </div>
     </div>

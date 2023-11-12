@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect
+from django.views.generic import UpdateView
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.mixins import DestroyModelMixin, UpdateModelMixin, RetrieveModelMixin, CreateModelMixin, \
@@ -23,6 +24,17 @@ class HomeViewSet(GenericViewSet, ListModelMixin):
     permission_classes = (IsAuthenticated,)
 
 
+class EventUpdateView(UpdateView):
+    model = Event
+    form_class = EventForm
+    template_name = 'features/event_update.html'
+
+    def get_object(self, queryset=None):
+        pk = self.kwargs['pk']
+        self.success_url = f'/event/{pk}'
+        return Event.objects.get(pk=pk)
+
+
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
@@ -37,7 +49,7 @@ class EventViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get', 'post'])
     def events(self, request, *args, **kwargs):
-        form = EventForm(request.POST)
+        form = EventForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             messages.info(request, 'Event created successfully')

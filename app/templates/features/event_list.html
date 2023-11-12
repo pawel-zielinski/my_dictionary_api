@@ -24,7 +24,7 @@
 
 <div class="content-box">
     <h1 style="text-align: center">Create Event</h1>
-    <form method="GET">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{form.as_p}}
         <div style="text-align: center">
@@ -42,15 +42,15 @@
         <div class="content-box">
             <div class="topic">
                 <b>
-                    <a href="{% url 'eventpage' pk=each.id %}" style="color: inherit">
+                    <a href="{% url 'eventpage-detail' pk=each.id %}" style="color: inherit">
                         {{ each.name | upper }}
                     </a>
                 </b>
             </div>
 
             <strong>Organizer:</strong> {{ each.organizer.first_name }} {{ each.organizer.last_name }}<br>
-            <strong>Date:</strong> {{ each.date }}<br>
-            <strong>Guests:</strong> {{ each.guests | length }}<br>
+            <strong>Date:</strong> {{ each.date | date:"Y-m-d" }}<br>
+            <strong>Guests:</strong> {{ each.guests.all | length }}<br>
         </div>
         {% endfor %}
     </form>
