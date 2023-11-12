@@ -31,23 +31,26 @@
                     <div class="col-md-6">
                         <article class="gallery-wrap">
                             <div class="text-center">
-                                <a href="#"><img src="{{ data.attachment }}" class="img-fluid"
+                                <a href="{{ data.attachment }}"><img src="{{ data.attachment }}" class="img-fluid"
                                                  style="max-width: 300px;"></a>
                             </div>
                         </article>
                     </div>
+                     </div>
+
+            </div>
+                    <div class="col-md-12 d-flex justify-content-center">
                     {% if is_author %}
-                <a href="{% url 'docspage-update' pk=data.id %}" class="btn btn-sm btn-success">Update</a>
+                <a href="{% url 'docspage-update' pk=data.id %}" class="btn btn-lg btn-success">Update</a>
                 {% endif %}
             </form>
                 {% if is_author %}
                 <form action="{% url 'docspage-delete' pk=data.id %}" method="post" novalidate>
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    <button type="submit" class="btn btn-lg btn-danger">Delete</button>
                 </form>
                 {% endif %}
 
-            </div>
         </div>
     </div>
 </div>
