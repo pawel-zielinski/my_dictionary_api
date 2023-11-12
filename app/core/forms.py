@@ -1,5 +1,5 @@
 from django import forms
-from core.models import Event, User
+from core.models import Event, User, Document
 
 
 class EventForm(forms.ModelForm):
@@ -15,3 +15,22 @@ class EventForm(forms.ModelForm):
             'attachment': forms.FileInput(attrs={'class': 'form-control'}),
             'notes': forms.TextInput(attrs={'class': 'form-control'}),
         }
+
+
+class DocumentForm(forms.ModelForm):
+    class Meta:
+        model = Document
+        fields = ('title', 'course', 'attachment', 'summary')
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'course': forms.Select(attrs={'class': 'form-control'}),
+            'attachment': forms.FileInput(attrs={'class': 'form-control'}),
+            'summary': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+    def save(self, author=None, commit=True, **kwargs):
+        instance = super(DocumentForm, self).save(commit=False)
+        instance.author = User.objects.get(id=author.id) if author else self.instance.author
+        if commit:
+            instance.save()
+        return instance

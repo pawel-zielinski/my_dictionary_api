@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load rest_framework %}
-{% block title_block %} Event | update {% endblock %}
+{% block title_block %} Document | update {% endblock %}
 
 {% block body %}
 <style>
@@ -17,7 +17,7 @@
 
 
 <div class="content-box">
-    <h1 style="text-align: center">Update Event</h1>
+    <h1 style="text-align: center">Update Document</h1>
     <form method="post">
         {% csrf_token %}
         {{form.as_p}}

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load rest_framework %}
-{% block title_block %} Event | detail {% endblock %}
+{% block title_block %} Document | detail {% endblock %}
 
 {% block body %}
 
@@ -18,16 +18,15 @@
 
 <div class="container">
     <div class="content-box mt-4">
-        <h1 class="text-center">{{ data.name }}</h1>
+        <h1 class="text-center">{{ data.title }}</h1>
         <div class="content-box">
-            <form action="{% url 'eventpage-detail' pk=data.id %}" method="get" novalidate>
+            <form action="{% url 'docspage-detail' pk=data.id %}" method="get" novalidate>
                 <div class="row">
                     <div class="col-md-6">
-                        <strong>Organizer:</strong> {{ data.organizer.first_name }} {{ data.organizer.last_name }}<br>
-                        <strong>Guests:</strong> {{ data.guests|length }}<br>
-                        <strong>Tags:</strong> {% for tag in data.tags %} {{ tag.name }} {% endfor %}<br>
-                        <strong>Date:</strong> {{ data.date }}<br>
-                        <strong>Notes:</strong> {{ data.notes }}<br>
+                        <strong>Date added:</strong> {{ data.date_added }}<br>
+                        <strong>Author:</strong> {{ data.author }}<br>
+                        <strong>Course:</strong> {{ data.course }}<br>
+                        <strong>Summary:</strong> {{ data.summary | default_if_none:"" }}<br>
                     </div>
                     <div class="col-md-6">
                         <article class="gallery-wrap">
@@ -37,12 +36,12 @@
                             </div>
                         </article>
                     </div>
-                    {% if request.user.id == data.organizer.id %}
-                <a href="{% url 'eventpage-update' pk=data.id %}" class="btn btn-sm btn-success">Update</a>
+                    {% if is_author %}
+                <a href="{% url 'docspage-update' pk=data.id %}" class="btn btn-sm btn-success">Update</a>
                 {% endif %}
             </form>
-                {% if request.user.id == data.organizer.id %}
-                <form action="{% url 'eventpage-delete' pk=data.id %}" method="post" novalidate>
+                {% if is_author %}
+                <form action="{% url 'docspage-delete' pk=data.id %}" method="post" novalidate>
                     {% csrf_token %}
                     <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                 </form>

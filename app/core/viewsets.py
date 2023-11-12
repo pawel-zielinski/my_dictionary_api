@@ -11,7 +11,7 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from core.forms import EventForm
+from core.forms import EventForm, DocumentForm
 from core.models import Event, User, Document
 from core.permissions import EventPermission, UserPermission, DocumentPermission
 from core.serializers import HomeSerializer, EventSerializer, UserSerializer, DocumentSerializer
@@ -71,7 +71,7 @@ class EventViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         instance.delete()
         messages.info(request, 'Event deleted successfully')
-        return HttpResponseRedirect(redirect_to='/event')
+        return HttpResponseRedirect(redirect_to='/event/')
 
 
 class UserViewSet(GenericViewSet, RetrieveModelMixin, UpdateModelMixin):
@@ -80,32 +80,50 @@ class UserViewSet(GenericViewSet, RetrieveModelMixin, UpdateModelMixin):
     permission_classes = (IsAuthenticated, UserPermission,)
 
 
+class DocumentUpdateView(UpdateView):
+    model = Event
+    form_class = DocumentForm
+    template_name = 'features/docs_update.html'
+
+    def get_object(self, queryset=None):
+        pk = self.kwargs['pk']
+        self.success_url = f'/docs/{pk}'
+        return Document.objects.get(pk=pk)
+
+
 class DocumentViewSet(viewsets.ModelViewSet):
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
     permission_classes = (IsAuthenticated, DocumentPermission,)
+    renderer_classes = (TemplateHTMLRenderer,)
+    template_name = 'features/docs_list.html'
 
-    def list(self, request, *args, **kwargs):
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        is_author = instance.author == User.objects.get(username=request.user.username)
+        return Response({'data': serializer.data, 'is_author': is_author}, template_name='features/docs_detail.html')
+
+    @action(detail=True, methods=['get', 'post'])
+    def docs(self, request, *args, **kwargs):
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save(author=request.user)
+            messages.info(request, 'Document created successfully')
+
         queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors)
+        return Response({'form': form, 'docs': queryset})
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
         if serializer.is_valid():
-            serializer.save(author=request.user)
+            serializer.save(organizer=request.user)
             return Response(serializer.data)
         return Response(serializer.errors)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.delete()
-        return Response(status=204)
+        messages.info(request, 'Document deleted successfully')
+        return HttpResponseRedirect(redirect_to='/docs/')

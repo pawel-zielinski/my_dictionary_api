@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load rest_framework %}
-{% block title_block %} Event | list {% endblock %}
+{% block title_block %} Document | list {% endblock %}
 
 {% block body %}
 <style>
@@ -21,9 +21,8 @@
     }
 </style>
 
-{% if is_organizer %}
 <div class="content-box">
-    <h1 style="text-align: center">Create Event</h1>
+    <h1 style="text-align: center">Create Document</h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{form.as_p}}
@@ -32,25 +31,24 @@
         </div>
     </form>
 </div>
-{% endif %}
 
 <div class="content-box">
-    <h1 style="text-align: center">Events</h1>
+    <h1 style="text-align: center">Documents</h1>
     <form action="{% url 'eventpage' %}" method="get" novalidate>
-        {% for each in events %}
+        {% for each in docs %}
 
         <div class="content-box">
             <div class="topic">
                 <b>
-                    <a href="{% url 'eventpage-detail' pk=each.id %}" style="color: inherit">
-                        {{ each.name | upper }}
+                    <a href="{% url 'docspage-detail' pk=each.id %}" style="color: inherit">
+                        {{ each.title | upper }}
                     </a>
                 </b>
             </div>
 
-            <strong>Organizer:</strong> {{ each.organizer.first_name }} {{ each.organizer.last_name }}<br>
-            <strong>Date:</strong> {{ each.date | date:"Y-m-d" }}<br>
-            <strong>Guests:</strong> {{ each.guests.all | length }}<br>
+            <strong>Date added:</strong> {{ each.date_added | date:"Y-m-d" }}<br>
+            <strong>Author:</strong> {{ each.author.first_name }} {{ each.author.last_name }}<br>
+            <strong>Course:</strong> {{ each.course.name }}<br>
         </div>
         {% endfor %}
     </form>
