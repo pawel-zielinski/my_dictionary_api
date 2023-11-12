@@ -18,7 +18,7 @@
                         <i class="fa fa-user-circle-o"></i> {{ request.user.username }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby='navbarDropdown'>
-                        <a class="dropdown-item" href="{% url 'userpage-detail' pk=request.user.id %}">Profile</a>
+                        <a class="dropdown-item" href="{% url 'userpage-update' pk=request.user.id %}">Profile</a>
                         <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
                     </div>
                 </li>

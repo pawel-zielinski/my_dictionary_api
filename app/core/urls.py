@@ -1,6 +1,7 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
-from core.viewsets import HomeViewSet, EventViewSet, UserViewSet, DocumentViewSet, EventUpdateView, DocumentUpdateView
+from core.viewsets import HomeViewSet, EventViewSet, UserViewSet, DocumentViewSet, EventUpdateView, DocumentUpdateView, \
+    UserUpdateView
 
 router = DefaultRouter()
 router.register('home', HomeViewSet, basename='homepage')
@@ -17,5 +18,6 @@ urlpatterns = [
     path('docs/<int:pk>/', DocumentViewSet.as_view({'get': 'retrieve'}), name='docspage-detail'),
     path('docs/<int:pk>/edit', DocumentUpdateView.as_view(), name='docspage-update'),
     path('docs/<int:pk>/delete', DocumentViewSet.as_view({'post': 'destroy'}), name='docspage-delete'),
+    path('user/<int:pk>/edit', UserUpdateView.as_view(), name='userpage-update'),
 ]
 urlpatterns += router.urls

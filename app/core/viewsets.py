@@ -10,7 +10,7 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from core.forms import EventForm, DocumentForm
+from core.forms import EventForm, DocumentForm, UserForm
 from core.models import Event, User, Document
 from core.permissions import EventPermission, UserPermission, DocumentPermission
 from core.serializers import HomeSerializer, EventSerializer, UserSerializer, DocumentSerializer
@@ -78,12 +78,6 @@ class EventViewSet(viewsets.ModelViewSet):
         return HttpResponseRedirect(redirect_to='/event/')
 
 
-class UserViewSet(GenericViewSet, RetrieveModelMixin, UpdateModelMixin):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = (IsAuthenticated, UserPermission,)
-
-
 class DocumentUpdateView(UpdateView):
     model = Event
     form_class = DocumentForm
@@ -133,3 +127,19 @@ class DocumentViewSet(viewsets.ModelViewSet):
         instance.delete()
         messages.info(request, 'Document deleted successfully')
         return HttpResponseRedirect(redirect_to='/docs/')
+
+
+class UserViewSet(GenericViewSet, RetrieveModelMixin, UpdateModelMixin):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated, UserPermission,)
+
+
+class UserUpdateView(UpdateView):
+    model = User
+    form_class = UserForm
+    template_name = 'features/user_update.html'
+
+    def get_object(self, queryset=None):
+        self.success_url = f'/home/'
+        return User.objects.get(pk=self.kwargs['pk'])
