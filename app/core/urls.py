@@ -10,7 +10,7 @@ router.register('docs', DocumentViewSet, basename='document')
 urlpatterns = [
     path('event/', EventViewSet.as_view({'get': 'events', 'post': 'events'}), name='eventpage'),
     path('event/<int:pk>/', EventViewSet.as_view({'get': 'retrieve'}), name='eventpage-detail'),
-    path('event/<int:pk>/edit', EventUpdateView.as_view(),
-         name='eventpage-update'),
+    path('event/<int:pk>/edit', EventUpdateView.as_view(), name='eventpage-update'),
+    path('event/<int:pk>/delete', EventViewSet.as_view({'post': 'destroy'}), name='eventpage-delete'),
 ]
 urlpatterns += router.urls

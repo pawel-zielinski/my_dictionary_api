@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import UpdateView
 from rest_framework import viewsets
@@ -68,7 +69,8 @@ class EventViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.delete()
-        return Response(status=204)
+        messages.info(request, 'Event deleted successfully')
+        return HttpResponseRedirect(redirect_to='/event')
 
 
 class UserViewSet(GenericViewSet, RetrieveModelMixin, UpdateModelMixin):

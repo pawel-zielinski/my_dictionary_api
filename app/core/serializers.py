@@ -16,17 +16,24 @@ class HomeSerializer(Serializer):
 
 
 class EventSerializer(ModelSerializer):
+    organizer = serializers.SerializerMethodField()
+
     class Meta:
         model = Event
         fields = (
             'id',
             'name',
+            'organizer',
             'guests',
             'tags',
             'attachment',
             'date',
             'notes',
         )
+
+    @staticmethod
+    def get_organizer(obj):
+        return obj.organizer
 
     def create(self, validated_data):
         organizer = User.objects.get(username=self.context['request'].user.username)

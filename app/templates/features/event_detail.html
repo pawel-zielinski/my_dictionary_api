@@ -37,9 +37,16 @@
                             </div>
                         </article>
                     </div>
-                </div>
                 <a href="{% url 'eventpage-update' pk=data.id %}" class="btn btn-sm btn-success">Update</a>
             </form>
+                {% if request.user.id == data.organizer.id %}
+                <form action="{% url 'eventpage-delete' pk=data.id %}" method="post" novalidate>
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+                {% endif %}
+
+            </div>
         </div>
     </div>
 </div>

@@ -12,7 +12,7 @@ class EventPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         if view.action in ['update', 'destroy', 'create']:
-            return obj.organizer == request.user
+            return obj.organizer == User.objects.get(username=request.user.username)
         return True
 
 
