@@ -1,6 +1,6 @@
 import os
 import uuid
-from datetime import date, datetime
+from datetime import datetime
 
 from django.core.validators import FileExtensionValidator
 from django.db import models

@@ -1,11 +1,10 @@
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.views.generic import UpdateView
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.mixins import DestroyModelMixin, UpdateModelMixin, RetrieveModelMixin, CreateModelMixin, \
-    ListModelMixin
+from rest_framework.mixins import UpdateModelMixin, RetrieveModelMixin, ListModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response

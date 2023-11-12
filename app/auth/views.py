@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse
-from rest_framework import views, permissions, status, generics
+from rest_framework import views, permissions, status
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 
@@ -14,7 +14,7 @@ from core.models import User
 
 class LoginView(views.APIView):
     """Thesis Degree API login APIView."""
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (~permissions.IsAuthenticated,)
     renderer_classes = (TemplateHTMLRenderer,)
     template_name = 'auth/login.html'
 
