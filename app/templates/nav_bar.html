@@ -1,0 +1,34 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'homepage-list' %}">Diploma</a>
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a href="{% url 'eventpage' %}" class="btn btn-info btn-sm">Events</a>
+                    <a href="{% url 'document-list' %}" class="btn btn-info btn-sm">Documents</a>
+                </li>
+                <li class="nav-item dropdown" style="color: white;">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown" aria-hashpopup="true" aria-expanded="false">
+                        <i class="fa fa-user-circle-o"></i> {{ request.user.username }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby='navbarDropdown'>
+                        <a class="dropdown-item" href="{% url 'userpage-update' pk=request.user.id %}">Profile</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+                    </div>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a href="{% url 'login' %}" class="btn btn-info btn-sm">Log In</a>
+                    <a href="{% url 'auth_register' %}" class="btn btn-info btn-sm">Sign Up</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

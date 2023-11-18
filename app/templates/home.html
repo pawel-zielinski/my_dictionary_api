@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block body %}
+<style>
+    .disclaimer-box {
+        max-width: 1000px;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: justify;
+    }
+
+    .content-box {
+        max-width: 800px;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: justify;
+    }
+
+    .paragraph {
+        text-align: center;
+
+    }
+
+    .sign {
+        text-align: right;
+    }
+
+    .title {
+        text-align: center;
+        color: brown;
+
+    }
+</style>
+<div class="disclaimer-box">
+    <h2 class="title">DISCLAIMER</h2>
+    <h4 class="paragraph">Project Information and Data Security Notice</h4>
+    <p>
+        This website, herein referred to as the "Project" has been implemented as part of engineering work and is
+        authored by Paweł Zieliński and Piotr Zieliński. The Project is designed to serve as a demonstration and is
+        equipped with basic security measures to protect its functionality.
+    </p>
+    <div class="content-box">
+        <h4 class="paragraph">Security Measures</h4>
+        <p>
+            The authors of the Project have implemented fundamental security measures to safeguard its operation.
+            However, users are hereby informed that the Project may not provide comprehensive protection against all
+            potential risks.
+        </p>
+        <h4 class="paragraph">Data Posting Policy</h4>
+        <p>
+            The Project is intended for demonstration purposes only. Users are advised that any data posted on any
+            website implemented as part of the Project should be public and must not contain sensitive information,
+            including but not limited to personal data.
+        </p>
+        <h4 class="paragraph">User Responsibility</h4>
+        <p>
+            Users acknowledge and agree that they are solely responsible for the data they choose to post on the
+            Project. The authors of the Project, Paweł Zieliński and Piotr Zieliński, disclaim any responsibility for
+            the compromise of data posted on the website.
+        </p>
+        <h4 class="paragraph">Limited Liability</h4>
+        <p>
+            The authors do not assume any liability for the security of data posted on the Project. Users are encouraged
+            to exercise caution and refrain from posting sensitive information.
+        </p>
+        <h4 class="paragraph">Demonstration Purposes</h4>
+        <p>
+            It is crucial to understand that the Project is developed for educational and demonstrative purposes. It may
+            not meet the same security standards as production systems.
+        </p>
+        <p>
+            By using this Project, users explicitly agree to the terms outlined in this disclaimer. The authors reserve
+            the right to modify or update this disclaimer without prior notice. Users are advised to review this
+            disclaimer regularly for any changes.
+        </p>
+
+    </div>
+    <p class="sign">
+        <a href="https://github.com/pawel-zielinski/my_dictionary_api">
+            Paweł Zieliński and Piotr Zieliński
+        </a>
+    </p>
+</div>
+{% endblock %}

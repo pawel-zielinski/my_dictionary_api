@@ -12,7 +12,7 @@ class EventPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         if view.action in ['update', 'destroy', 'create']:
-            return obj.organizer == request.user
+            return obj.organizer == User.objects.get(username=request.user.username)
         return True
 
 
@@ -20,12 +20,13 @@ class DocumentPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         if view.action in ['update', 'destroy']:
-            return obj.author == request.user
+            return obj.author == User.objects.get(username=request.user.username)
+        return True
 
 
 class UserPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         if view.action in ['update', 'destroy']:
-            return obj == request.user
+            return obj == User.objects.get(username=request.user.username)
         return True

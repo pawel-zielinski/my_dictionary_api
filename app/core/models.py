@@ -1,17 +1,34 @@
 import os
 import uuid
-from datetime import date
+from datetime import datetime
 
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.contrib.auth.models import User as DjangoUser
 
 
 def document_file_patch(instance, filename):
     """Generate file path for new documents."""
-    dt = date.today()
+    now = datetime.now()
+    dt = now.date()
+    time_components = now.time()
+    time_str = time_components.strftime('%H%M%S%f')[:-3]
+
     ext = filename.split('.')[-1]
-    filename = f'{uuid.uuid4()}.{ext}'
+    filename = f'{uuid.uuid4()}_{time_str}.{ext}'
     return os.path.join(f'document_files/{dt.year}/{dt.month}/{dt.day}/', filename)
+
+
+def event_file_patch(instance, filename):
+    """Generate file path for new events."""
+    now = datetime.now()
+    dt = now.date()
+    time_components = now.time()
+    time_str = time_components.strftime('%H%M%S%f')[:-3]
+
+    ext = filename.split('.')[-1]
+    filename = f'{uuid.uuid4()}_{time_str}.{ext}'
+    return os.path.join(f'event_files/{dt.year}/{dt.month}/{dt.day}/', filename)
 
 
 class User(DjangoUser):
@@ -26,8 +43,10 @@ class Event(models.Model):
     organizer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='organizer')
     guests = models.ManyToManyField(User, related_name='guests')
     tags = models.ManyToManyField('Tag', related_name='tags')
-    date = models.DateTimeField()
-    attachment = models.FileField()
+    date = models.DateField()
+    time = models.TimeField(null=True, blank=True)
+    attachment = models.FileField(upload_to=event_file_patch,
+                                  validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])])
     notes = models.CharField(max_length=250)
 
     def __str__(self):
@@ -52,7 +71,8 @@ class Document(models.Model):
     title = models.CharField(max_length=256)
     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='course')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author')
-    attachment = models.FileField(upload_to=document_file_patch, blank=True, null=True)
+    attachment = models.FileField(upload_to=document_file_patch, blank=True, null=True,
+                                  validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
     summary = models.CharField(max_length=1024, blank=True, null=True)
     date_added = models.DateField(auto_now=True)
 

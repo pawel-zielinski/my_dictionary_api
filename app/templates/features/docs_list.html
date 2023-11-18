@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load rest_framework %}
+{% block title_block %} Document | list {% endblock %}
+
+{% block body %}
+<style>
+    .content-box {
+        max-width: 600px;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: justify;
+    }
+
+    .topic {
+        text-align: center;
+        color: RGB(26, 161, 184);
+        text-decoration: none;
+    }
+</style>
+
+<div class="content-box">
+    <h1 style="text-align: center">Create Document</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form.as_p}}
+        <div style="text-align: center">
+            <button type="submit" class="btn btn-sm btn-success">Create</button>
+        </div>
+    </form>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <form method="get" action="{% url 'document-list' %}" class="mb-3">
+            <div class="input-group">
+                <label for="courseFilter" class="input-group-text">Filter by Course:</label>
+                <input type="text" id="courseFilter" name="course_name_contains" class="form-control"
+                       value="{{ request.GET.course_name_contains }}">
+                <button type="submit" class="btn btn-primary">Apply Filter</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-6">
+        <form method="get" action="{% url 'document-list' %}" class="mb-3">
+            <div class="input-group">
+                <label for="courseFilter1" class="input-group-text">Filter by Title:</label>
+                <input type="text" id="courseFilter1" name="title_contains" class="form-control"
+                       value="{{ request.GET.title_contains }}">
+                <button type="submit" class="btn btn-primary">Apply Filter</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="content-box">
+    <h1 style="text-align: center">Documents</h1>
+    <form action="{% url 'docspage' %}" method="get" novalidate>
+        {% for each in docs %}
+
+        <div class="content-box">
+            <div class="topic">
+                <b>
+                    <a href="{% url 'docspage-detail' pk=each.id %}" style="color: inherit">
+                        {{ each.title | upper }}
+                    </a>
+                </b>
+            </div>
+
+            <strong>Date added:</strong> {{ each.date_added | date:"Y-m-d" }}<br>
+            <strong>Author:</strong> {{ each.author.first_name }} {{ each.author.last_name }}<br>
+            <strong>Course:</strong> {{ each.course.name }}<br>
+        </div>
+        {% endfor %}
+    </form>
+</div>
+{% endblock %}

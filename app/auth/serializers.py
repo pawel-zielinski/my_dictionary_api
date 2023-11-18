@@ -57,7 +57,7 @@ class LoginSerializer(serializers.Serializer):
     """Serializer for login endpoint."""
     username = serializers.CharField(
         label="Username",
-        write_only=True
+        write_only=True,
     )
     password = serializers.CharField(
         label="Password",

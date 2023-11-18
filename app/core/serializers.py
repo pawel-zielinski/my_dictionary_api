@@ -16,16 +16,29 @@ class HomeSerializer(Serializer):
 
 
 class EventSerializer(ModelSerializer):
+    organizer = serializers.SerializerMethodField()
+    tags = serializers.SerializerMethodField()
+
     class Meta:
         model = Event
         fields = (
+            'id',
             'name',
+            'organizer',
             'guests',
             'tags',
             'attachment',
             'date',
+            'time',
             'notes',
         )
+
+    @staticmethod
+    def get_organizer(obj):
+        return obj.organizer
+
+    def get_tags(self, obj):
+        return [tag for tag in obj.tags.all()]
 
     def create(self, validated_data):
         organizer = User.objects.get(username=self.context['request'].user.username)
@@ -44,15 +57,28 @@ class UserSerializer(ModelSerializer):
 
 
 class DocumentSerializer(ModelSerializer):
+    author = serializers.SerializerMethodField()
+    course = serializers.SerializerMethodField()
+
     class Meta:
         model = Document
         fields = (
+            'id',
             'title',
+            'author',
             'course',
             'attachment',
             'summary',
             'date_added',
         )
+
+    @staticmethod
+    def get_author(obj):
+        return f'{obj.author.first_name} {obj.author.last_name}'
+
+    @staticmethod
+    def get_course(obj):
+        return obj.course.name
 
     def create(self, validated_data):
         author = User.objects.get(username=self.context['request'].user.username)
